@@ -4,7 +4,8 @@
   // 画面の文言（質問以外）
   const UI = {
     ja: {
-      langButton: "EN",
+      htmlLang: "ja",
+      langLabel: "言語",
       levelsLabel: "レベル",
       prev: "前のカード",
       next: "次のカード",
@@ -16,7 +17,8 @@
       endText: "おつかれさまでした",
     },
     en: {
-      langButton: "日本語",
+      htmlLang: "en",
+      langLabel: "Language",
       levelsLabel: "Levels",
       prev: "Previous card",
       next: "Next card",
@@ -26,6 +28,19 @@
       tapToEnd: "Tap to continue",
       endTitle: "The End",
       endText: "Thanks for playing",
+    },
+    zh: {
+      htmlLang: "zh-Hant",
+      langLabel: "語言",
+      levelsLabel: "等級",
+      prev: "上一張",
+      next: "下一張",
+      tapToFlip: "點一下翻牌",
+      tapToNext: "點一下看下一張",
+      tapToLevel: (name) => `點一下前往 ${name}`,
+      tapToEnd: "點一下繼續",
+      endTitle: "結束",
+      endText: "謝謝參與",
     },
   };
 
@@ -40,7 +55,7 @@
   const dots = document.getElementById("dots");
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
-  const langBtn = document.getElementById("langBtn");
+  const langSelect = document.getElementById("langSelect");
   const levelsNav = document.getElementById("levels");
   const tabs = document.querySelectorAll(".level-tab");
 
@@ -54,16 +69,19 @@
   function loadLang() {
     try {
       const saved = localStorage.getItem("lang");
-      if (saved === "ja" || saved === "en") return saved;
+      if (UI[saved]) return saved;
     } catch (e) { /* 保存できない環境では既定値 */ }
-    return navigator.language.startsWith("ja") ? "ja" : "en";
+    const browser = navigator.language;
+    if (browser.startsWith("ja")) return "ja";
+    if (browser.startsWith("zh")) return "zh";
+    return "en";
   }
 
   function saveLang() {
     try { localStorage.setItem("lang", lang); } catch (e) { /* 無視 */ }
   }
 
-  // 文字列ならそのまま、{ ja, en } なら今の言語を返す
+  // 文字列ならそのまま、{ ja, en, zh } なら今の言語を返す（なければ日本語）
   function text(value) {
     return typeof value === "string" ? value : value[lang] || value.ja;
   }
@@ -99,13 +117,14 @@
     const total = questions.length;
     const end = isEnd();
 
-    document.documentElement.lang = lang;
+    document.documentElement.lang = t.htmlLang;
     document.body.dataset.level = level;
     tabs.forEach((tab) => {
       tab.setAttribute("aria-selected", tab.dataset.level === level);
     });
 
-    langBtn.textContent = t.langButton;
+    langSelect.value = lang;
+    langSelect.setAttribute("aria-label", t.langLabel);
     levelsNav.setAttribute("aria-label", t.levelsLabel);
     prevBtn.setAttribute("aria-label", t.prev);
     nextBtn.setAttribute("aria-label", t.next);
@@ -167,8 +186,8 @@
   });
 
   // 言語切替（めくった状態はそのまま）
-  langBtn.addEventListener("click", () => {
-    lang = lang === "ja" ? "en" : "ja";
+  langSelect.addEventListener("change", () => {
+    lang = langSelect.value;
     saveLang();
     render();
   });
