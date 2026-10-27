@@ -7,13 +7,31 @@
   const frontNumber = document.getElementById("frontNumber");
   const backMeta = document.getElementById("backMeta");
   const question = document.getElementById("question");
+  const backHint = document.getElementById("backHint");
   const dots = document.getElementById("dots");
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
   const tabs = document.querySelectorAll(".level-tab");
 
-  let level = "crust";
+  const levels = Object.keys(data); // crust → mantle → core の順
+
+  let level = levels[0];
   let index = 0;
+
+  // delta 分だけ進めた先の { level, index }。セットの端では隣のセットへ移る。
+  // 全体の最初・最後より外に出る場合は null。
+  function neighbor(delta) {
+    let li = levels.indexOf(level);
+    let next = index + delta;
+    if (next >= data[level].questions.length) {
+      if (++li >= levels.length) return null;
+      next = 0;
+    } else if (next < 0) {
+      if (--li < 0) return null;
+      next = data[levels[li]].questions.length - 1;
+    }
+    return { level: levels[li], index: next };
+  }
 
   function render() {
     const { name, subtitle: sub, questions } = data[level];
@@ -34,8 +52,13 @@
       .map((_, i) => `<span class="dot${i === index ? " active" : ""}"></span>`)
       .join("");
 
-    prevBtn.disabled = index === 0;
-    nextBtn.disabled = index === total - 1;
+    const next = neighbor(1);
+    if (!next) backHint.textContent = "おしまい";
+    else if (next.level !== level) backHint.textContent = `タップで ${data[next.level].name} へ`;
+    else backHint.textContent = "タップで次のカードへ";
+
+    prevBtn.disabled = !neighbor(-1);
+    nextBtn.disabled = !next;
   }
 
   // 新しいカードは裏向き（未めくり）で表示する
@@ -49,12 +72,17 @@
   }
 
   function go(delta) {
-    const next = index + delta;
-    if (next < 0 || next >= data[level].questions.length) return;
-    show(level, next);
+    const target = neighbor(delta);
+    if (target) show(target.level, target.index);
   }
 
-  card.addEventListener("click", () => card.classList.toggle("flipped"));
+  // 表紙ならめくる、めくった後なら次のカードへ
+  function tapCard() {
+    if (card.classList.contains("flipped")) go(1);
+    else card.classList.add("flipped");
+  }
+
+  card.addEventListener("click", tapCard);
   prevBtn.addEventListener("click", () => go(-1));
   nextBtn.addEventListener("click", () => go(1));
   tabs.forEach((tab) => {
@@ -67,7 +95,7 @@
     else if (e.key === "ArrowRight") go(1);
     else if (e.key === " " || e.key === "Enter") {
       e.preventDefault();
-      card.classList.toggle("flipped");
+      tapCard();
     }
   });
 
