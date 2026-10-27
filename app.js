@@ -67,7 +67,7 @@
 
   // 文字列ならそのまま、{ ja, en } なら今の言語を返す
   function text(value) {
-    return typeof value === "string" ? value : value[lang] ?? value.ja;
+    return typeof value === "string" ? value : value[lang] || value.ja;
   }
 
   // そのレベルで移動できる最後の index（最後のレベルは「おしまい」カードまで）
