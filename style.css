@@ -41,15 +41,33 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 /* ヘッダー */
 .header {
+  position: relative;
   text-align: center;
   padding-top: 20px;
 }
 
+.lang-btn {
+  position: absolute;
+  top: 14px;
+  right: 0;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.lang-btn:active { background: rgba(255, 255, 255, 0.1); }
+
 .title {
   margin: 0 0 16px;
-  font-size: 1.1rem;
+  padding: 0 68px; /* 右上の言語ボタンと重ならないように左右を空ける */
+  font-size: clamp(0.85rem, 4.6vw, 1.1rem);
   font-weight: 600;
   letter-spacing: 0.15em;
+  white-space: nowrap;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -136,6 +154,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
     repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.06) 0 2px, transparent 2px 14px),
     linear-gradient(160deg, var(--accent), var(--accent-deep));
   color: #1c1410;
+}
+
+/* 最後の「おしまい」カード：3レベルの色を混ぜた表紙 */
+.card.end .card-front {
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.06) 0 2px, transparent 2px 14px),
+    linear-gradient(160deg, #d9b48f, #e8743b 50%, #e8344a);
 }
 
 .card-level {

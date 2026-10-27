@@ -10,7 +10,8 @@
 <body data-level="crust">
   <header class="header">
     <h1 class="title">36 Questions</h1>
-    <nav class="levels" role="tablist" aria-label="レベル">
+    <button class="lang-btn" id="langBtn"></button>
+    <nav class="levels" role="tablist" id="levels">
       <button class="level-tab" role="tab" data-level="crust">Crust</button>
       <button class="level-tab" role="tab" data-level="mantle">Mantle</button>
       <button class="level-tab" role="tab" data-level="core">Core</button>
@@ -24,7 +25,7 @@
         <div class="card-face card-front">
           <span class="card-level" id="frontLevel"></span>
           <span class="card-number" id="frontNumber"></span>
-          <span class="card-hint">タップしてめくる</span>
+          <span class="card-hint" id="frontHint"></span>
         </div>
         <div class="card-face card-back">
           <span class="card-meta" id="backMeta"></span>
@@ -36,9 +37,9 @@
   </main>
 
   <footer class="controls">
-    <button class="nav-btn" id="prevBtn" aria-label="前のカード">‹</button>
+    <button class="nav-btn" id="prevBtn">‹</button>
     <div class="dots" id="dots"></div>
-    <button class="nav-btn" id="nextBtn" aria-label="次のカード">›</button>
+    <button class="nav-btn" id="nextBtn">›</button>
   </footer>
 
   <script src="questions.js"></script>
