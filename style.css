@@ -24,6 +24,9 @@ html, body { height: 100%; }
 
 html { background: #1c1410; }
 
+/* スマホでダブルタップしても拡大しない（スクロールやピンチ操作はそのまま） */
+html, body, button { touch-action: manipulation; }
+
 body {
   margin: 0;
   display: flex;
@@ -161,6 +164,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 
 /* 最後の「おしまい」カード：3レベルの色を混ぜた表紙 */
+.card.end { cursor: default; }
+
 .card.end .card-front {
   background:
     repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.06) 0 2px, transparent 2px 14px),

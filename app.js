@@ -14,7 +14,6 @@
       tapToEnd: "タップで次へ",
       endTitle: "おしまい",
       endText: "おつかれさまでした",
-      tapToRestart: "タップで最初から",
     },
     en: {
       langButton: "日本語",
@@ -27,7 +26,6 @@
       tapToEnd: "Tap to continue",
       endTitle: "The End",
       endText: "Thanks for playing",
-      tapToRestart: "Tap to start over",
     },
   };
 
@@ -117,7 +115,7 @@
     if (end) {
       frontLevel.textContent = t.endTitle;
       frontNumber.textContent = t.endText;
-      frontHint.textContent = t.tapToRestart;
+      frontHint.textContent = "";
     } else {
       frontLevel.textContent = name;
       frontNumber.textContent = `${index + 1} / ${total}`;
@@ -154,9 +152,9 @@
     if (target) show(target.level, target.index);
   }
 
-  // 表紙ならめくる、めくった後なら次のカードへ。「おしまい」なら最初から。
+  // 表紙ならめくる、めくった後なら次のカードへ。「おしまい」では何もしない。
   function tapCard() {
-    if (isEnd()) show(levels[0], 0);
+    if (isEnd()) return;
     else if (card.classList.contains("flipped")) go(1);
     else card.classList.add("flipped");
   }
