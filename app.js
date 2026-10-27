@@ -15,6 +15,7 @@
       tapToEnd: "タップで次へ",
       endTitle: "おしまい",
       endText: "おつかれさまでした",
+      restart: "最初からやり直す",
     },
     en: {
       htmlLang: "en",
@@ -28,6 +29,7 @@
       tapToEnd: "Tap to continue",
       endTitle: "The End",
       endText: "Thanks for playing",
+      restart: "Start over",
     },
     zh: {
       htmlLang: "zh-Hant",
@@ -41,6 +43,7 @@
       tapToEnd: "點一下繼續",
       endTitle: "結束",
       endText: "謝謝參與",
+      restart: "重新開始",
     },
   };
 
@@ -55,6 +58,7 @@
   const dots = document.getElementById("dots");
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
+  const restartBtn = document.getElementById("restartBtn");
   const langSelect = document.getElementById("langSelect");
   const levelsNav = document.getElementById("levels");
   const tabs = document.querySelectorAll(".level-tab");
@@ -148,6 +152,11 @@
     else if (next && level === lastLevel && next.index === total) backHint.textContent = t.tapToEnd;
     else backHint.textContent = t.tapToNext;
 
+    // 「おしまい」カードでは点の代わりにやり直しボタンを出す
+    dots.hidden = end;
+    restartBtn.hidden = !end;
+    restartBtn.textContent = t.restart;
+
     dots.innerHTML = questions
       .map((_, i) => `<span class="dot${i === index ? " active" : ""}"></span>`)
       .join("");
@@ -180,6 +189,7 @@
 
   card.addEventListener("click", tapCard);
   prevBtn.addEventListener("click", () => go(-1));
+  restartBtn.addEventListener("click", () => show(levels[0], 0));
   nextBtn.addEventListener("click", () => go(1));
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => show(tab.dataset.level, 0));

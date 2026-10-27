@@ -264,6 +264,22 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .nav-btn:active { background: rgba(255, 255, 255, 0.2); }
 .nav-btn:disabled { opacity: 0.25; cursor: default; }
 
+[hidden] { display: none !important; }
+
+.restart-btn {
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #1c1410;
+  animation: enter 0.35s ease-out;
+}
+
+.restart-btn:active { background: var(--accent-deep); }
+
 .dots {
   display: flex;
   flex-wrap: wrap;
